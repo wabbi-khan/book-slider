@@ -1,0 +1,939 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+    <title>JJR Network</title>
+    <meta name="viewport" content="width = 1050, user-scalable = no" />
+    <script type="text/javascript" src="extras/jquery.min.1.7.js"></script>
+    <script type="text/javascript" src="extras/modernizr.2.5.3.min.js"></script>
+    <script type="text/javascript" src="lib/hash.js"></script>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            -webkit-animation-name: fadeIn;
+            -webkit-animation-duration: 0.4s;
+            animation-name: fadeIn;
+            animation-duration: 0.4s;
+        }
+        
+        .modal-content {
+            background-color: #EBEBEB;
+            margin: 10% auto;
+            border: 1px solid #888;
+            width: 25%;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 8px #34495e;
+        }
+        
+        .modal-content h3 {
+            color: #0077A2;
+        }
+        
+        .close {
+            color: #0077A2;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 2px 16px;
+        }
+        
+        .modal-footer {
+            padding: 2px 16px;
+            background-color: #EBEBEB;
+            color: white;
+        }
+        
+        @-webkit-keyframes slideIn {
+            from {
+                bottom: -300px;
+                opacity: 0
+            }
+            to {
+                bottom: 0;
+                opacity: 1
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                bottom: -300px;
+                opacity: 0
+            }
+            to {
+                bottom: 0;
+                opacity: 1
+            }
+        }
+        
+        @-webkit-keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+        
+        .order-now {
+            margin: 0;
+            padding: 0;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .order-now a {
+            color: #1C7BA6;
+            position: relative;
+            z-index: 9999;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        input {
+            width: 95%;
+            padding: 8px;
+            height: 16px;
+            margin-bottom: 10px;
+            border: 0;
+            border-radius: 1px;
+        }
+        
+        textarea {
+            min-width: 95%;
+            max-width: 95%;
+            min-height: 50px;
+            padding: 8px;
+            height: 16px;
+            margin-bottom: 10px;
+            border: 0;
+            border-radius: 1px;
+        }
+        
+        .btn-blue {
+            background: #0077A2;
+            padding-bottom: 30px;
+            color: #fff;
+            padding-top: 10px;
+            width: 100%;
+            border-radius: 2px;
+            font-size: 20px;
+        }
+        
+        .btn-blue:active,
+        .btn-blue:focus,
+        .btn-blue:hover {
+            background: #3498db;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .order-button a {
+            position: absolute;
+            right: 100px;
+            bottom: 290px;
+            background: #0077A2;
+            padding: 10px;
+            color: #fff;
+            border-radius: 2px;
+            z-index: 999;
+            cursor: pointer;
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 13px;
+        }
+        
+        .order-button a:active,
+        .order-button a:focus,
+        .order-button a:hover {
+            background: #3498db;
+        }
+        
+        .home-button a {
+            position: absolute;
+            right: 100px;
+            bottom: 330px;
+            background: #0077A2;
+            padding: 10px;
+            color: #fff;
+            border-radius: 2px;
+            z-index: 999;
+            cursor: pointer;
+            text-decoration: none;
+            padding-left: 26px;
+            padding-right: 26px;
+            font-family: Verdana, Geneva, sans-serif;
+            font-size: 13px;
+        }
+        
+        .home-button a:active,
+        .home-button a:focus,
+        .home-button a:hover {
+            background: #3498db;
+        }
+        
+        .error_class {
+            color: #a94442;
+            display: block;
+            font-size: 14px;
+        }
+        
+        .text_error {
+            background-image: url('pics/cross.png');
+            background-position: right 5px center;
+            background-repeat: no-repeat;
+            border-color: #b94a48;
+        }
+        
+        .text_correct {
+            background-image: url('pics/tick.png');
+            background-position: right 5px center;
+            background-repeat: no-repeat;
+            border-color: #468847;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!--
+<div class="order-now">
+	<a id="myBtn">Click here for order</a>
+</div>
+-->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <h3>Order Details</h3>
+                <form id="order_form">
+                    <div id="msg"></div>
+                    <input type="text" placeholder="Name" required id="user_name" />
+                    <span class="error_class" id="user_name_error"></span>
+                    <input type="text" placeholder="Phone" required id="phone" />
+                    <span class="error_class" id="phone_error"></span>
+                    <input type="email" placeholder="Email" required id="email" />
+                    <span class="error_class" id="email_error"></span>
+                    <input type="text" placeholder="Product Code" required id="product_code" />
+                    <span class="error_class" id="product_code_error"></span>
+                    <textarea placeholder="Any Comment" required id="comment"></textarea>
+                    <span class="error_class" id="comment_error"></span>
+                    <div class="text-right">
+                        <input type="button" class="btn-blue" value="Send" id="send" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="canvas">
+
+        <div class="zoom-icon zoom-icon-in"></div>
+        <div class="order-button"><a id="myBtn">Order Now</a></div>
+        <div class="home-button"><a href="https://jjrnetwork.com/">Home</a></div>
+        <div class="magazine-viewport">
+            <div class="container">
+                <div class="magazine">
+                    <!-- Next button -->
+                    <div ignore="1" class="next-button"></div>
+                    <!-- Previous button -->
+                    <div ignore="1" class="previous-button"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="thumbnails">
+            <div>
+                <ul>
+                    <li class="i">
+                        <img src="pages/thumb/1-thumb.jpg" width="76" height="100" class="page-1">
+                        <span>1</span>
+                    </li>
+                    <li class="d">
+                        <img src="pages/thumb/2-thumb.jpg" width="76" height="100" class="page-2">
+                        <img src="pages/thumb/3-thumb.jpg" width="76" height="100" class="page-3">
+                        <span>2-3</span>
+                    </li>
+                    <li class="d">
+                        <img src="pages/thumb/4-thumb.jpg" width="76" height="100" class="page-4">
+                        <img src="pages/thumb/5-thumb.jpg" width="76" height="100" class="page-5">
+                        <span>4-5</span>
+                    </li>
+                    <li class="d">
+                        <img src="pages/thumb/6-thumb.jpg" width="76" height="100" class="page-6">
+                        <img src="pages/thumb/7-thumb.jpg" width="76" height="100" class="page-7">
+                        <span>6-7</span>
+                    </li>
+                    <li class="d">
+                        <img src="pages/thumb/8-thumb.jpg" width="76" height="100" class="page-8">
+                        <img src="pages/thumb/9-thumb.jpg" width="76" height="100" class="page-9">
+                        <span>8-9</span>
+                    </li>
+                    <li class="d">
+                        <img src="pages/thumb/10-thumb.jpg" width="76" height="100" class="page-10">
+                        <img src="pages/thumb/11-thumb.jpg" width="76" height="100" class="page-11">
+                        <span>10-11</span>
+                    </li>
+                    <li class="d">
+                        <img src="pages/thumb/12-thumb.jpg" width="76" height="100" class="page-12">
+                        <img src="pages/thumb/13-thumb.jpg" width="76" height="100" class="page-13">
+                        <span>12-13</span>
+                    </li>
+                    <li class="e">
+                        <img src="pages/thumb/14-thumb.jpg" width="76" height="100" class="page-14">
+                        <img src="pages/thumb/15-thumb.jpg" width="76" height="100" class="page-15">
+                        <span>14-15</span>
+                    </li>
+                    <li class="f">
+                        <img src="pages/thumb/16-thumb.jpg" width="76" height="100" class="page-16">
+                        <img src="pages/thumb/17-thumb.jpg" width="76" height="100" class="page-17">
+                        <span>16-17</span>
+                    </li>
+                    <li class="i">
+                        <img src="pages/thumb/18-thumb.jpg" width="76" height="100" class="page-18">
+                        <img src="pages/thumb/19-thumb.jpg" width="76" height="100" class="page-19">
+                        <span>18-19</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/20-thumb.jpg" width="76" height="100" class="page-20">
+                        <img src="pages/thumb/21-thumb.jpg" width="76" height="100" class="page-21">
+                        <span>20-21</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/22-thumb.jpg" width="76" height="100" class="page-22">
+                        <img src="pages/thumb/23-thumb.jpg" width="76" height="100" class="page-23">
+                        <span>22-23</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/24-thumb.jpg" width="76" height="100" class="page-24">
+                        <img src="pages/thumb/25-thumb.jpg" width="76" height="100" class="page-25">
+                        <span>24-25</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/26-thumb.jpg" width="76" height="100" class="page-26">
+                        <img src="pages/thumb/27-thumb.jpg" width="76" height="100" class="page-27">
+                        <span>26-27</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/28-thumb.jpg" width="76" height="100" class="page-28">
+                        <img src="pages/thumb/29-thumb.jpg" width="76" height="100" class="page-29">
+                        <span>28-29</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/30-thumb.jpg" width="76" height="100" class="page-30">
+                        <img src="pages/thumb/31-thumb.jpg" width="76" height="100" class="page-31">
+                        <span>30-31</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/32-thumb.jpg" width="76" height="100" class="page-32">
+                        <img src="pages/thumb/33-thumb.jpg" width="76" height="100" class="page-33">
+                        <span>32-33</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/34-thumb.jpg" width="76" height="100" class="page-34">
+                        <img src="pages/thumb/35-thumb.jpg" width="76" height="100" class="page-35">
+                        <span>33-35</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/36-thumb.jpg" width="76" height="100" class="page-36">
+                        <img src="pages/thumb/37-thumb.jpg" width="76" height="100" class="page-37">
+                        <span>36-37</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/38-thumb.jpg" width="76" height="100" class="page-38">
+                        <img src="pages/thumb/39-thumb.jpg" width="76" height="100" class="page-39">
+                        <span>38-39</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/40-thumb.jpg" width="76" height="100" class="page-40">
+                        <img src="pages/thumb/41-thumb.jpg" width="76" height="100" class="page-41">
+                        <span>40-41</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/42-thumb.jpg" width="76" height="100" class="page-42">
+                        <img src="pages/thumb/43-thumb.jpg" width="76" height="100" class="page-43">
+                        <span>42-43</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/44-thumb.jpg" width="76" height="100" class="page-44">
+                        <img src="pages/thumb/45-thumb.jpg" width="76" height="100" class="page-45">
+                        <span>44-45</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/46-thumb.jpg" width="76" height="100" class="page-46">
+                        <img src="pages/thumb/47-thumb.jpg" width="76" height="100" class="page-47">
+                        <span>46-47</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/48-thumb.jpg" width="76" height="100" class="page-48">
+                        <img src="pages/thumb/49-thumb.jpg" width="76" height="100" class="page-49">
+                        <span>48-49</span>
+                    </li>
+                    <li class="j">
+                        <img src="pages/thumb/50-thumb.jpg" width="76" height="100" class="page-50">
+                        <img src="pages/thumb/51-thumb.jpg" width="76" height="100" class="page-51">
+                        <span>50-51</span>
+                    </li>
+                    <ul>
+                        <div>
+                        </div>
+            </div>
+
+            <script type="text/javascript">
+                $("#send").click(function(e) {
+
+                    $(".error_class").html("");
+
+                    var valid = true;
+                    var emailRegex = new RegExp(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$/i);
+
+                    var user_name = $("#user_name").val();
+                    var phone = $("#phone").val();
+                    var email = $("#email").val();
+                    var product_code = $("#product_code").val();
+                    var comment = $("#comment").val();
+
+                    if (user_name == "") {
+                        $("#user_name_error").html('Name Required');
+                        $("#user_name").addClass("text_error");
+                        $("#user_name").css("border-color", "#b94a48");
+                        $("#user_name").focus();
+                        valid = false;
+                    } else {
+                        $("#user_name").addClass("text_correct");
+                        $("#user_name").css("border-color", "#468847");
+                    }
+
+                    if (phone == "") {
+                        $("#phone_error").html('Phone Required');
+                        $("#phone").addClass("text_error");
+                        $("#phone").css("border-color", "#b94a48");
+                        $("#phone").focus();
+                        valid = false;
+                    } else {
+                        $("#phone").addClass("text_correct");
+                        $("#phone").css("border-color", "#468847");
+                    }
+
+                    if (email == "") {
+                        $("#email_error").html('Email Required');
+                        $("#email").addClass("text_error");
+                        $("#email").css("border-color", "#b94a48");
+                        $("#email").focus();
+                        valid = false;
+                    } else if (email != "" && !emailRegex.test(email)) {
+                        $("#email_error").html("Invalid Email");
+                        $("#email").addClass("text_error");
+                        $("#email").css("border-color", "#b94a48");
+                        $("#email").focus();
+                        valid = false;
+                    } else {
+                        $("#email").addClass("text_correct");
+                        $("#email").css("border-color", "#468847");
+                    }
+
+                    if (product_code == "") {
+                        $("#product_code_error").html('Product Code Required');
+                        $("#product_code").addClass("text_error");
+                        $("#product_code").css("border-color", "#b94a48");
+                        $("#product_code").focus();
+                        valid = false;
+                    } else {
+                        $("#product_code").addClass("text_correct");
+                        $("#product_code").css("border-color", "#468847");
+                    }
+
+                    if (comment == "") {
+                        $("#comment_error").html('Comment Required');
+                        $("#comment").addClass("text_error");
+                        $("#comment").css("border-color", "#b94a48");
+                        $("#comment").focus();
+                        valid = false;
+                    } else {
+                        $("#comment").addClass("text_correct");
+                        $("#comment").css("border-color", "#468847");
+                    }
+
+                    if (valid == true) {
+                        var params = {
+                            user_name: user_name,
+                            phone: phone,
+                            email: email,
+                            product_code: product_code,
+                            comment: comment
+                        };
+
+                        $.ajax({
+                            type: "POST",
+                            url: "order.php",
+                            data: params,
+                            success: function(response) {
+                                $("#msg").html('<span style="color:#0077A2;display:block;">' + response + '</span>');
+
+                                window.setTimeout(function() {
+                                    $(".text_correct").removeClass("text_correct");
+                                    $(".text_error").removeClass("text_error");
+                                    $("#msg").html('');
+                                    $("#order_form")[0].reset();
+                                    $("#myModal").css("display", "none");
+                                }, 3000);
+                            }
+                        });
+
+                        return false;
+                    }
+                });
+
+                function loadApp() {
+
+                    $('#canvas').fadeIn(1000);
+
+                    var flipbook = $('.magazine');
+
+                    // Check if the CSS was already loaded
+
+                    if (flipbook.width() == 0 || flipbook.height() == 0) {
+                        setTimeout(loadApp, 100);
+                        return;
+                    }
+
+                    // Create the flipbook
+
+                    flipbook.turn({
+
+                        // Magazine width
+
+                        width: 922,
+
+                        // Magazine height
+
+                        height: 600,
+
+                        // Duration in millisecond
+
+                        duration: 1000,
+
+                        // Hardware acceleration
+
+                        acceleration: !isChrome(),
+
+                        // Enables gradients
+
+                        gradients: true,
+
+                        // Auto center this flipbook
+
+                        autoCenter: true,
+
+                        // Elevation from the edge of the flipbook when turning a page
+
+                        elevation: 50,
+
+                        // The number of pages
+
+                        pages: 167,
+
+                        // Events
+
+                        when: {
+                            turning: function(event, page, view) {
+
+                                var book = $(this),
+                                    currentPage = book.turn('page'),
+                                    pages = book.turn('pages');
+
+                                // Update the current URI
+
+                                Hash.go('page/' + page).update();
+
+                                // Show and hide navigation buttons
+
+                                disableControls(page);
+
+
+                                $('.thumbnails .page-' + currentPage).
+                                parent().
+                                removeClass('current');
+
+                                $('.thumbnails .page-' + page).
+                                parent().
+                                addClass('current');
+
+
+
+                            },
+
+                            turned: function(event, page, view) {
+
+                                disableControls(page);
+
+                                $(this).turn('center');
+
+                                if (page == 1) {
+                                    $(this).turn('peel', 'br');
+                                }
+
+                            },
+
+                            missing: function(event, pages) {
+
+                                // Add pages that aren't in the magazine
+
+                                for (var i = 0; i < pages.length; i++)
+                                    addPage(pages[i], $(this));
+
+                            }
+                        }
+
+                    });
+
+                    // Zoom.js
+
+                    $('.magazine-viewport').zoom({
+                        flipbook: $('.magazine'),
+
+                        max: function() {
+
+                            return largeMagazineWidth() / $('.magazine').width();
+
+                        },
+
+                        when: {
+
+                            swipeLeft: function() {
+
+                                $(this).zoom('flipbook').turn('next');
+
+                            },
+
+                            swipeRight: function() {
+
+                                $(this).zoom('flipbook').turn('previous');
+
+                            },
+
+                            resize: function(event, scale, page, pageElement) {
+
+                                if (scale == 1)
+                                    loadSmallPage(page, pageElement);
+                                else
+                                    loadLargePage(page, pageElement);
+
+                            },
+
+                            zoomIn: function() {
+
+                                $('.thumbnails').hide();
+                                $('.made').hide();
+                                $('.magazine').removeClass('animated').addClass('zoom-in');
+                                $('.zoom-icon').removeClass('zoom-icon-in').addClass('zoom-icon-out');
+
+                                if (!window.escTip && !$.isTouch) {
+                                    escTip = true;
+
+                                    $('<div />', {
+                                        'class': 'exit-message'
+                                    }).
+                                    html('<div>Press ESC to exit</div>').
+                                    appendTo($('body')).
+                                    delay(2000).
+                                    animate({
+                                        opacity: 0
+                                    }, 500, function() {
+                                        $(this).remove();
+                                    });
+                                }
+                            },
+
+                            zoomOut: function() {
+
+                                $('.exit-message').hide();
+                                $('.thumbnails').fadeIn();
+                                $('.made').fadeIn();
+                                $('.zoom-icon').removeClass('zoom-icon-out').addClass('zoom-icon-in');
+
+                                setTimeout(function() {
+                                    $('.magazine').addClass('animated').removeClass('zoom-in');
+                                    resizeViewport();
+                                }, 0);
+
+                            }
+                        }
+                    });
+
+                    // Zoom event
+
+                    if ($.isTouch)
+                        $('.magazine-viewport').bind('zoom.doubleTap', zoomTo);
+                    else
+                        $('.magazine-viewport').bind('zoom.tap', zoomTo);
+
+
+                    // Using arrow keys to turn the page
+
+                    $(document).keydown(function(e) {
+
+                        var previous = 37,
+                            next = 39,
+                            esc = 27;
+
+                        switch (e.keyCode) {
+                            case previous:
+
+                                // left arrow
+                                $('.magazine').turn('previous');
+                                e.preventDefault();
+
+                                break;
+                            case next:
+
+                                //right arrow
+                                $('.magazine').turn('next');
+                                e.preventDefault();
+
+                                break;
+                            case esc:
+
+                                $('.magazine-viewport').zoom('zoomOut');
+                                e.preventDefault();
+
+                                break;
+                        }
+                    });
+
+                    // URIs - Format #/page/1 
+
+                    Hash.on('^page\/([0-9]*)$', {
+                        yep: function(path, parts) {
+                            var page = parts[1];
+
+                            if (page !== undefined) {
+                                if ($('.magazine').turn('is'))
+                                    $('.magazine').turn('page', page);
+                            }
+
+                        },
+                        nop: function(path) {
+
+                            if ($('.magazine').turn('is'))
+                                $('.magazine').turn('page', 1);
+                        }
+                    });
+
+
+                    $(window).resize(function() {
+                        resizeViewport();
+                    }).bind('orientationchange', function() {
+                        resizeViewport();
+                    });
+
+                    // Events for thumbnails
+
+                    $('.thumbnails').click(function(event) {
+
+                        var page;
+
+                        if (event.target && (page = /page-([0-9]+)/.exec($(event.target).attr('class')))) {
+
+                            $('.magazine').turn('page', page[1]);
+                        }
+                    });
+
+                    $('.thumbnails li').
+                    bind($.mouseEvents.over, function() {
+
+                        $(this).addClass('thumb-hover');
+
+                    }).bind($.mouseEvents.out, function() {
+
+                        $(this).removeClass('thumb-hover');
+
+                    });
+
+                    if ($.isTouch) {
+
+                        $('.thumbnails').
+                        addClass('thumbanils-touch').
+                        bind($.mouseEvents.move, function(event) {
+                            event.preventDefault();
+                        });
+
+                    } else {
+
+                        $('.thumbnails ul').mouseover(function() {
+
+                            $('.thumbnails').addClass('thumbnails-hover');
+
+                        }).mousedown(function() {
+
+                            return false;
+
+                        }).mouseout(function() {
+
+                            $('.thumbnails').removeClass('thumbnails-hover');
+
+                        });
+
+                    }
+
+
+                    // Regions
+
+                    if ($.isTouch) {
+                        $('.magazine').bind('touchstart', regionClick);
+                    } else {
+                        $('.magazine').click(regionClick);
+                    }
+
+                    // Events for the next button
+
+                    $('.next-button').bind($.mouseEvents.over, function() {
+
+                        $(this).addClass('next-button-hover');
+
+                    }).bind($.mouseEvents.out, function() {
+
+                        $(this).removeClass('next-button-hover');
+
+                    }).bind($.mouseEvents.down, function() {
+
+                        $(this).addClass('next-button-down');
+
+                    }).bind($.mouseEvents.up, function() {
+
+                        $(this).removeClass('next-button-down');
+
+                    }).click(function() {
+
+                        $('.magazine').turn('next');
+
+                    });
+
+                    // Events for the next button
+
+                    $('.previous-button').bind($.mouseEvents.over, function() {
+
+                        $(this).addClass('previous-button-hover');
+
+                    }).bind($.mouseEvents.out, function() {
+
+                        $(this).removeClass('previous-button-hover');
+
+                    }).bind($.mouseEvents.down, function() {
+
+                        $(this).addClass('previous-button-down');
+
+                    }).bind($.mouseEvents.up, function() {
+
+                        $(this).removeClass('previous-button-down');
+
+                    }).click(function() {
+
+                        $('.magazine').turn('previous');
+
+                    });
+
+
+                    resizeViewport();
+
+                    $('.magazine').addClass('animated');
+
+                }
+
+                // Zoom icon
+
+                $('.zoom-icon').bind('mouseover', function() {
+
+                    if ($(this).hasClass('zoom-icon-in'))
+                        $(this).addClass('zoom-icon-in-hover');
+
+                    if ($(this).hasClass('zoom-icon-out'))
+                        $(this).addClass('zoom-icon-out-hover');
+
+                }).bind('mouseout', function() {
+
+                    if ($(this).hasClass('zoom-icon-in'))
+                        $(this).removeClass('zoom-icon-in-hover');
+
+                    if ($(this).hasClass('zoom-icon-out'))
+                        $(this).removeClass('zoom-icon-out-hover');
+
+                }).bind('click', function() {
+
+                    if ($(this).hasClass('zoom-icon-in'))
+                        $('.magazine-viewport').zoom('zoomIn');
+                    else if ($(this).hasClass('zoom-icon-out'))
+                        $('.magazine-viewport').zoom('zoomOut');
+
+                });
+
+                $('#canvas').hide();
+
+
+                // Load the HTML4 version if there's not CSS transform
+
+                yepnope({
+                    test: Modernizr.csstransforms,
+                    yep: ['lib/turn.js'],
+                    nope: ['lib/turn.html4.min.js'],
+                    both: ['lib/zoom.min.js', 'js/magazine.js', 'css/magazine.css'],
+                    complete: loadApp
+                });
+            </script>
+            <script>
+                var modal = document.getElementById('myModal');
+                var btn = document.getElementById("myBtn");
+                var span = document.getElementsByClassName("close")[0];
+                btn.onclick = function() {
+                    modal.style.display = "block";
+                }
+                span.onclick = function() {
+                    modal.style.display = "none";
+                }
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            </script>
+</body>
+
+</html>
